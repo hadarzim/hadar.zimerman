@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}
+    about
+{% endblock %}
+{% block tohen %}
+    {{ super() }}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/static/JS/CVPage.js"></script>
+    <link rel="stylesheet" href="/static/CSS/assignment8.css">
+    <div id="GridContainer">
+        <div id="item2">
+            <h2>About me:</h2>
+            <h2> name: {{ profile.name | default('Joen dou', true) }} {{ profile.last_name | float(26) }}</h2>
+            <h2> university: {{ university | default('BEER SHEVA', true)}}</h2>
+            {% if profile.name %}
+                <h3> <a href="https://moodle2.bgu.ac.il/moodle/my/"> My moodle </a> </h3>
+            {% else %}
+                <h3> Please log in </h3>
+            {% endif %}
+            <h2> degrees:</h2>
+            <ol>
+                <li> {{ degrees[0] }}</li>
+            </ol>
+            <h2>Hobbies</h2>
+            <ul>
+                {% for hobby in hobbies %}
+                    <li>{{ hobby }}</li>
+                {% endfor %}
+            </ul>
+            <h3>EDUCATION</h3>
+            <ul>
+                <li>THIRD YEAR STUDENT IN MANAGEMENT OF INFORMATION SYSTEMS </li>
+            </ul>
+            <h3>MILITARY SERVICE</h3>
+            <ul>
+                <li> Novices Commander at camp 80</li>
+            </ul>
+
+        </div>
+    </div>
+{% endblock %}
