@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}
+    form
+{% endblock %}
+{% block tohen %}
+
+    <meta charset="UTF-8">
+    <h1>Welcome to </h1>
+    <h2>form 1</h2>
+    <form action="/assignment9" method="GET">
+        username:  <input name="username" type="text">
+        <input type="submit">
+    </form>
+    {% if username %}
+        <ul>
+            {% for user in users %}
+                {% if users[user].username == session['username'] %}
+                    <li> name: {{ users[user].username }}, email: {{ users[user].email }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <ul>
+            {% for user in users %}
+                <li> name: {{ users[user].username }}, email: {{ users[user].email }} </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <h2>form 2</h2>
+    <h1>please log in</h1>
+    <form action="/assignment9" method="POST">
+        username:  <input name="username" type="text">
+        password: <input name="password" type="password">
+        <input type="submit">
+    </form>
+    {% if  session.username %}
+        <h3>Welcome back, {{ session.username }}!</h3>
+    {% else %}
+    {% endif %}
+{% endblock %}

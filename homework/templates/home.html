@@ -3,15 +3,16 @@
     home
 {% endblock %}
 {% block tohen %}
-    {{ super() }}
     {% set pageName= 'Home' %}
-    <h1> Welcome to {{ pageName }} page </h1>
+    <h1> Welcome , {{session.username | default('guest',True)}} !</h1>
     <h2 class="{% if name %}logged_in{%else%}stranger{% endif %}">BGU</h2>
 
     {% if name %}
         <h3> <a href="/more"> More </a> </h3>
         <h3> <a href="/assignment8"> About </a> </h3>
         <h3><a href="/catalog">Catalog </a></h3>
+        <h3><a href="/assignment9">Form </a></h3>
+        <h3><a href="/users">User </a></h3>
     {% else %}
         <h3> Please log in </h3>
     {% endif %}
