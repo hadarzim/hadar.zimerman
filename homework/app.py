@@ -3,6 +3,8 @@ from flask import render_template
 from flask import request
 from flask import session
 from interact_with_DB import interact_db
+import mysql.connector
+
 
 app = Flask(__name__)
 app.secret_key = '12345'
@@ -42,9 +44,6 @@ def catalog_func():
     return render_template('catalog.html')
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
 @app.route('/logout')
 def logout_func():
     session['username']=''
@@ -52,7 +51,7 @@ def logout_func():
 
 
 @app.route('/assignment9', methods=['GET', 'POST'])
-def assig9_func():
+def assignment9_func():
     if request.method == 'GET':
         if 'username' in request.args:
             username = request.args['username']
@@ -78,7 +77,7 @@ def assig9_func():
 
         else:
             return render_template('assignment9.html')
-    if request.method =='POST':
+    if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         found = True
@@ -92,25 +91,78 @@ def assig9_func():
         return render_template('assignment9.html', p_name=user)
     return render_template('assignment9.html')
 
-@app.route ('/users')
-def user_func():
-    query = "select * from users"
-    query_result = interact_db(query=query,query_type='fetch')
-    return render_template('users.html', users=query_result)
+from pages.assignment10.assignment10 import assignment10
+app.register_blueprint(assignment10)
 
-@app.route('/insert_user', methods=['POST'])
-def insert_user_func():
-    name = request.form['name']
-    email = request.form['email']
-    password = request.form['password']
+#
+# @app.route ('/users')
+# def user_func():
+#     query = "select * from users"
+#     query_result = interact_db(query=query,query_type='fetch')
+#     return render_template('users.html', users=query_result)
+#
+#
+# @app.route('/insert_user', methods=['GET','POST'])
+# def insert_user_func():
+#     if request.method == 'POST':
+#         name = request.form['name']
+#         email = request.form['email']
+#         password = request.form['password']
+#         query = "INSERT INTO users(name, email, password) VALUES ('%s','%s','%s')" % (name, email, password)
+#         interact_db(query=query, query_type='commit')
+#     return redirect('/users')
+#
+# @app.route('/update_Name', methods=['GET', 'POST'])
+# def nameupdate():
+#     if request.method == 'POST':
+#         user_id = request.form['id']
+#         name = request.form['name']
+#         query = "UPDATE users SET name='%s' WHERE id='%s' ;" % (name, user_id)
+#         interact_db(query=query, query_type='commit')
+#         return redirect('/users')
+#     return redirect('/users')
+#
+# @app.route('/update_Email', methods=['GET', 'POST'])
+# def emailupdate():
+#     if request.method == 'POST':
+#         user_id = request.form['id']
+#         email = request.form['email']
+#         query = "UPDATE users SET email='%s' WHERE id='%s' ;" % (email, user_id)
+#         interact_db(query=query, query_type='commit')
+#         return redirect('/users')
+#     return redirect('/users')
+#
+# @app.route('/delete_user', methods=['GET','POST'])
+# def delete_user_func():
+#     if request.method == 'GET':
+#         user_id = request.args['id']
+#         query = "DELETE FROM users WHERE id='%s';" % user_id
+#         interact_db(query, query_type='commit')
+#         return redirect('/users')
+#     return redirect('/users')
 
-    query = "INSERT INTO users(name, email, password) VALUES ('%s','%s','%s')" % (name, email, password)
-    interact_db(query=query, query_type='commit')
-    return redirect('/users')
 
-@app.route('/delete_user', methods=['POST'])
-def delete_user_func():
-    user_id = request.form['id']
-    query = "DELETE FROM users WHERE id='%s';" % user_id
-    interact_db(query, query_type='commit')
-    return redirect('/users')
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+def interact_db(query,query_type:str):
+    return_value = False
+    connection = mysql.connector.connect(host='localhost',
+                                         user='root',
+                                         passwd='root',
+                                         database='myflaskprojectdb')
+    cursor = connection.cursor(named_tuple=True)
+    cursor.execute(query)
+
+    if query_type == 'commit':
+        connection.commit()
+        return_value=True
+
+    if query_type == 'fetch':
+        query_result = cursor.fetchall()
+        return_value = query_result
+
+    connection.close()
+    cursor.close()
+    return return_value
