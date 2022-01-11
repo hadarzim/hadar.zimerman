@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block  title %}
+    Req Frontend
+{% endblock %}
+{% block tohen %}
+    <h1> Req Frontend</h1>
+    <h2>User list <button onclick="getUsers()">Get users</button></h2>
+    <main>
+
+    </main>
+     <script src="{{ url_for('static',filename='js/fetch.js')}}"></script>
+{#    <link rel="stylesheet" href="{{ url_for('static',filename='js/fetch.js') }}">#}
+{#    <script src="/static/js/fetch.js" ></script>#}
+
+
+
+
+<h2> Request - Backend </h2>
+        <form action="/assignment11/outer_source" method="get">
+            <input type="number" name="number" id="b_number">
+            <input type="submit" value="Click me">
+        </form>
+
+    <!--    output-->
+        <br><br>
+        <main>
+            {% if user %}
+                <img src="{{ user.avatar }}" alt="Profile Picture"/>
+                <div>
+                    <span>{{ user.first_name + " " + user.last_name }}</span>
+                    <br>
+                    <a href="mailto:{{ user.email }}">Send Email</a>
+                    <br><br>
+                </div>
+            {% endif %}
+        </main>
+    </div>
+{% endblock %}

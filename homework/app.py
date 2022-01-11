@@ -1,9 +1,12 @@
+from random import random
 from flask import Flask, redirect, url_for
 from flask import render_template
 from flask import request
 from flask import session
-from interact_with_DB import interact_db
+from interact_with_DB import interact_db, query_to_json
 import mysql.connector
+import requests
+import json
 
 
 app = Flask(__name__)
@@ -143,8 +146,7 @@ app.register_blueprint(assignment10)
 
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
 
 def interact_db(query,query_type:str):
     return_value = False
@@ -166,3 +168,51 @@ def interact_db(query,query_type:str):
     connection.close()
     cursor.close()
     return return_value
+
+# @app.route('/req_frontend')
+# def req_frontend_func():
+#     return render_template('req_frontend.html')
+
+
+
+# @app.route('/req_backend')
+# def req_backend_func():
+#     num = 3
+#     if "number" in request.args:
+#         num = int(request.args['number'])
+#     pockemons = get_pockemons(num)
+#     return render_template('req_backend.html')
+#
+# def get_pockemons(num):
+#     pockemons = []
+#     for i in range(num):
+#         random_n = random.randint(1, 100)
+#         res = requests.get(f'https://pokeapi.co/api/v2/pokemon/{random_n}')
+#         res = res.json()
+#         pockemons.append(res)
+#     return pockemons
+
+# @app.route('/req_frontend')
+# def getUser_func():
+#     return render_template('req_frontend.html')
+#
+
+@app.route("/assignment11/users")
+def assignment11_page():
+    query = "select * from users"
+    query_result = query_to_json(query=query)
+    return json.dumps(query_result)
+
+#  4+5
+@app.route("/assignment11/outer_source", methods=['GET'])
+def assignment11_os_page():
+    if 'number' in request.args:
+        number = request.args['number']
+        res = requests.get(url=f"https://reqres.in/api/users/{number}")
+        res = res.json()
+        return render_template('assignment11.html', user=res['data'])
+    return render_template('assignment11.html')
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
