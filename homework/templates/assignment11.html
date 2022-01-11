@@ -3,28 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Assignment 11 - Outer Source</title>
-{#    <link rel="stylesheet" href="/static/css/common.css">#}
-{#    <link rel="stylesheet" href="/static/css/assignment8.css">#}
 </head>
 <body>
     {% include('menu.html') %}
 
     <div class="content">
-    <!--    frontend -->
         <h2> Request - Frontend </h2>
         <input type="number" name="number" id="f_number"/>
         <button onclick="getUsers()">Click me</button>
-
         <script src="../static/js/assignment11.js"></script>
 
-    <!--    backend -->
         <h2> Request - Backend </h2>
         <form action="/assignment11/outer_source" method="get">
             <input type="number" name="number" id="b_number">
             <input type="submit" value="Click me">
         </form>
 
-    <!--    output-->
         <br><br>
         <main>
             {% if user %}
