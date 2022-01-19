@@ -1,5 +1,5 @@
 from random import random
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, jsonify
 from flask import render_template
 from flask import request
 from flask import session
@@ -212,6 +212,24 @@ def assignment11_os_page():
         res = res.json()
         return render_template('assignment11.html', user=res['data'])
     return render_template('assignment11.html')
+
+@app.route('/assignment12/restapi_users', defaults={'user_id':19})
+@app.route("/assignment12/restapi_users/<int:user_id>")
+def assignment12(user_id):
+    query = 'select * from users where id=%s' % user_id
+    users = interact_db(query=query, query_type='fetch')
+    if len(users) == 0:
+        return_dict = {
+            'status': 'failed',
+            'message': 'user not found'
+        }
+    else:
+        return_dict = {
+            'id': users[0].id,
+            'name' : users[0].name,
+            'email': users[0].email,
+        }
+    return jsonify(return_dict)
 
 
 if __name__ == '__main__':
